@@ -2,8 +2,12 @@
 import { Box } from "@mui/material";
 import AppFoundation from "@/components/templates/AppFoundation";
 import AppTextField from "@/components/atoms/AppTextField";
+import { useState } from "react";
 
 const AppQuick = () => {
+    const [searchValue , setSearchValue ] = useState(' ')
+
+
     return(<>
         <Box className=" bg-black w-full h-[100vh] flex  justify-start items-center   ">
             <Box className=' w-[10%] h-full'></Box>
@@ -12,12 +16,13 @@ const AppQuick = () => {
                     border={true}
                     borderRadius={'0px'}
                     placeholder ={' '}
-                    backgroundColor='primary.grey'
+                    backgroundColor={'primary.grey'}
                     startAdornment={true}
+                    color={'white'}
                     paddingStartAdornment={'0px 0px 0px 10px'}
-                    value= {''}
+                    value= {searchValue}
                     onChange={((value)=>{
-    
+                        setSearchValue(value)
                     })}
                 />
             </Box>

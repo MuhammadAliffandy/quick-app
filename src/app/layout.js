@@ -8,7 +8,6 @@ const lato = Lato({
   subsets: ['latin'],
   weight: ['400', '700'],
   variable: '--font-lato',
-  display: 'swap',
 })
 
 export const metadata = {
@@ -18,10 +17,8 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
-      <body
-        className={`${lato.variable} antialiased`}
-      >
+    <html lang="en" >
+      <body className={`${lato.variable} antialiased`}>
         <ThemeRegistry>
           {children}
           <ToastContainer 

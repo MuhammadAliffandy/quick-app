@@ -16,7 +16,7 @@ const AppMessage = (props) => {
                     alt={'profile'}
                     iconPadding={'10px'}
                 />
-                <Box className='flex flex-col items-start justify-center'>
+                <Box className='flex flex-col gap-[2px] items-start justify-center'>
 
                     <Box className='flex items-center justify-start gap-[22px]'>
                         <Typography sx={{
@@ -31,12 +31,12 @@ const AppMessage = (props) => {
 
                     { props.isGroup &&
                         <Typography sx={{
-                            fontSize: "10px",
+                            fontSize: "12px",
                             fontWeight: 'bold'
                         }}>{`${props.username}:` || 'Username:'}</Typography>
                     }
                     <Typography sx={{
-                        fontSize: "10px",
+                        fontSize: "12px",
                     }}>
                         {props.message || 'some latest message on here'}
                     </Typography>

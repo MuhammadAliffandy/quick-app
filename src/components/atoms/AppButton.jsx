@@ -3,6 +3,7 @@ import { Button , Typography} from "@mui/material";
 const AppButton = (props) => {
     return(
         <Button sx={{ 
+                textTransform: 'none',
                 backgroundColor: props.backgroundColor || "primary.main" , 
                 border: props.border ||'none' ,
                 margin: props.margin || 0,
