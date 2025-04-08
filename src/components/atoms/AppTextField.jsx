@@ -14,7 +14,7 @@ const AppTextField = (props) => {
             maxRows={5}
             placeholder={ props.placeholder || "Search" }
             sx={{
-                padding:'0px',
+                padding:0,
                 backgroundColor: props.backgroundColor || 'white',
                 borderRadius : props.borderRadius || '5px'
             }}
