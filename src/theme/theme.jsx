@@ -37,7 +37,7 @@ const theme = createTheme({
         },
     },
     typography: {
-        fontFamily: "Poppins",
+        fontFamily: 'var(--font-lato)',
     },
 });
 
