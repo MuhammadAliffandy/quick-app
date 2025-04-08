@@ -2,8 +2,8 @@
 const nextConfig = {
     reactStrictMode: false,
     env:{
-        BASE_URL:process.env.BASE_URL,
-        BASE_URL_DEV:process.env.BASE_URL_DEV
+        NEXT_PUBLIC_BASE_URL:process.env.NEXT_PUBLIC_BASE_URL,
+        NEXT_PUBLIC_BASE_URL_DEV:process.env.NEXT_PUBLIC_BASE_URL_DEV
     },
 }
 export default nextConfig
