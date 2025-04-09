@@ -12,10 +12,10 @@ const AppTextfieldInbox = (props) => {
                             backgroundColor: "#F2F2F2",
                         }} className={'flex flex-col items-stretch justify-start p-[10px] w-full rounded-t-[5px] border-[1px] border-black border-b-0'}>
                             <Box className = 'flex items-center w-full justify-between'> 
-                                <Typography sx={{ fontWeight: '700' }}  className="text-[10px] font-bold " >{`Replying to ${props.usernameReply || ''}`}</Typography>
+                                <Typography sx={{ fontWeight: '700' , fontSize: '14px' }}  >{`Replying to ${props.usernameReply || ''}`}</Typography>
                                 <CloseIcon onClick={props.onCloseReply} color='black' className="cursor-pointer"/>
                             </Box>
-                            <Typography className="text-[10px]">{props.messageReply || 'Messages from friend'}</Typography>
+                            <Typography sx={{  fontSize: '12px' }}>{props.messageReply || 'Messages from friend'}</Typography>
                         </Box>
                     }
                     <AppTextField

@@ -19,10 +19,10 @@ const AppTextfieldEditor = (props) => {
         <Box className='flex items-center gap-[22px] w-full '>
             {
                 <AppIconButton
-                    iconPath={'/icon/pencil.svg'}
+                    iconPath={  props.value != '' ? '/icon/pencil.svg' :  isChange ? '/icon/pencil.svg' : '/icon/pencil-gray.svg'}
                     iconSize={20}
                     backgroundColor={'transparent'}
-                    alt={'clock-icon'}
+                    alt={'edit-icon'}
                     iconPadding={'20px'}
                     onClick={()=>{setChange(true)}}
                 />

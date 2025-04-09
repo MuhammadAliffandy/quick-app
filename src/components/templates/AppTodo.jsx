@@ -23,15 +23,15 @@ const AppTodo = () => {
     const [ isNewTask , setNewTask ] = useState(false)
     const [ loading , setLoading ] = useState(false)
     const [ tasks , setTasks ] = useState([])
+    const [ currentTasks , setCurrentTasks ] = useState([])
 
-    const handleSortTask = async (value) => {
+    const handleSortTask = (value) => {
         setLoading(true)
         if(value == 0){
             const data = sortedByClosestDate(tasks)
             setTasks(data)
         }else{
-            const data = sortedByClosestDate(tasks)
-            setTasks(data)
+            setTasks(currentTasks)
         }
         setLoading(false)
     }
@@ -43,7 +43,8 @@ const AppTodo = () => {
             const data = {
                 title: newTitle,
                 description: newDescription,
-                date: newDate.toISOString()
+                date: newDate.toISOString(),
+                category: category,
             }
             
             const res = await createTodo(data)
@@ -65,7 +66,8 @@ const AppTodo = () => {
             const data = {
                 title: title,
                 description: description,
-                date: date.toISOString()
+                date: date.toISOString(),
+                category: category,
             }
             
             const res = await updateTodo(data)
@@ -109,6 +111,7 @@ const AppTodo = () => {
             
             if(res.status == 200){
                 setTasks(res.data)
+                setCurrentTasks(res.data)
                 setLoading(false)
             }else{
                 alert('fetching error')
@@ -122,7 +125,9 @@ const AppTodo = () => {
     }
 
     useEffect(()=>{
-        handleFetchTask()
+        if(tasks.length == 0 ){
+            handleFetchTask()
+        }
     },[])
 
 
@@ -151,7 +156,7 @@ const AppTodo = () => {
                     /> : 
                     tasks.map((data,index)=>{
                         return(
-                            <Box key={index} className='flex flex-col gap-[22px] w-full'>
+                            <Box key={data.id} className='flex flex-col gap-[22px] w-full'>
                                 {
                                     isNewTask && index == 0 && 
                                         <AppTask

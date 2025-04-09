@@ -34,7 +34,7 @@ const AppSelectCategory = (props) => {
           onBlur={()=> {setChange(false)}}
           IconComponent={() => null}
           sx={{ 
-            width: "90%",
+            minWidth: "90%",
           }}
           input={<OutlinedInput />}
           MenuProps={{

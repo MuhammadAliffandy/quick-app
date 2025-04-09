@@ -7,6 +7,8 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import AppIconButton from "../atoms/AppIconButton";
 
 const AppDatePicker = (props) => {
+
+    const [ isChange , setChange  ] = useState(false)
     const [selectedDate, setSelectedDate] = useState(null);
     const inputRef = useRef()    
 
@@ -14,7 +16,7 @@ const AppDatePicker = (props) => {
         <Box className='flex items-center gap-[22px]'>
             {
                 <AppIconButton
-                    iconPath={'/icon/clock.svg'}
+                    iconPath={ props.value != '' || props.value != null ? '/icon/clock.svg' :  isChange ? '/icon/clock.svg' : '/icon/clock-gray.svg'}
                     iconSize={20}
                     backgroundColor={'transparent'}
                     alt={'clock-icon'}
@@ -27,9 +29,11 @@ const AppDatePicker = (props) => {
             <Box className='max-w-[230px]'>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DatePicker
+                    onClose={() => setChange(false)}
                     value={ props.value || selectedDate}
                     onChange={(newValue) => {
                         setSelectedDate(newValue)
+                        setChange(true)
                         props.onChange(newValue)
                     }}
                     format="DD/MM/YYYY"

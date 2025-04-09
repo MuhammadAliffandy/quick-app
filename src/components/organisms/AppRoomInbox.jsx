@@ -5,7 +5,7 @@ import AppTextfieldInbox from "../molecules/AppTextfieldInbox";
 import AppBubbleInbox from "../molecules/AppBubbleInbox";
 import { useEffect, useState, useRef } from "react";
 import { convertFormatDateKey , assignUserColorsWithCookie} from "@/utils/helper";
-import { deleteMessage, getMessage, getMessages } from "@/api/repository/messagesRepository";
+import { createMessage, deleteMessage, getMessage, getMessages, updateMessage } from "@/api/repository/messagesRepository";
 import { toast } from "react-toastify";
 import { getUser } from "@/api/repository/usersRepository";
 import { getGroupMessage } from "@/api/repository/groupMessagesRepository";
@@ -22,6 +22,7 @@ const AppRoomInbox = (props) => {
     const [typingValue , setTypingValue] = useState('')
     const [isReply, setReply] = useState(false)
     const [messageReply , setMesssageReply] = useState('')
+    const [messageReplyId , setMesssageReplyId] = useState('')
     const [usernameReply , setUsernameReply] = useState('')
     const bottomRef = useRef(null);
 
@@ -130,6 +131,26 @@ const AppRoomInbox = (props) => {
             }
     };
 
+    const handleEditMessage = async (id) => {
+        try {
+            setLoading(true)
+            const res = await updateMessage(id)
+            if(res.status == 201){
+
+                setLoading(false)
+                toast.success('Edit Message Success')
+            }else{
+                setLoading(false)
+                toast.error('Edit Message Failed')
+                
+            }
+            
+        } catch (error) {
+            toast.error('Server error');
+            setLoading(false)
+        }
+    }
+
     const handleDeleteMessage = async (id) => {
         try {
             setLoading(true)
@@ -154,6 +175,36 @@ const AppRoomInbox = (props) => {
         setReply(true)
         setUsernameReply(data.username)
         setMesssageReply(data.message)
+        setMesssageReplyId(data.id)
+    }
+
+    const handleCreateMessage = async () => {
+        try {
+            setLoading(true)
+
+            const data = {
+                text: typingValue,
+                receiverId : props.data.senderId,
+                senderId: props.data.receiverId,
+                groupId: props.data.groupId != null ? props.data.groupId : null,
+                replyId: isReply ? messageReplyId : null
+            }
+
+            const res = await createMessage(data)
+            if(res.status == 201){
+
+                setLoading(false)
+                toast.success('Sending Message Success')
+            }else{
+                setLoading(false)
+                toast.error('Sending Message Failed')
+                
+            }
+            
+        } catch (error) {
+            toast.error('Server error');
+            setLoading(false)
+        }
     }
 
     useEffect(()=>{
@@ -217,10 +268,10 @@ const AppRoomInbox = (props) => {
                                                             message={data.text}
                                                             alignPopover={data.senderId == props.data.receiverId  ? "right" : 'left'}
                                                             date={''}
-                                                            onEdit={()=>{}}
+                                                            onEdit={()=>{handleEditMessage(data.id)}}
                                                             onDelete={()=>{handleDeleteMessage(data.id) }}
                                                             onShare={()=>{}}
-                                                            onReply={()=>{handleReplyMesasge({username:data.username , message: data.text })}}
+                                                            onReply={()=>{handleReplyMesasge({id: data.id, username:data.username , message: data.text })}}
 
                                                         />
                                                 )
@@ -240,7 +291,7 @@ const AppRoomInbox = (props) => {
                             onChange={((value)=>{
                                 setTypingValue(value)
                             })}
-                            onClick={()=>{}}
+                            onClick={handleCreateMessage}
                             isReply={isReply}
                             messageReply={messageReply}
                             usernameReply={usernameReply}
