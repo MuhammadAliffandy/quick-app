@@ -96,10 +96,10 @@ export default function AppTask(props) {
     }
     
     const handleCurrentData = () => {
-        const datePeriod = convertDatePeriodText('2025-04-10T17:00:00.000Z');
+        const datePeriods = convertDatePeriodText(props.datePeriod);
         setTitle(props.title)
         setDate(dayjs(props.date))
-        setDatePeriod(datePeriod)
+        setDatePeriod(datePeriods)
         setDateTime(dayjs(props.dateTime).format("DD/MM/YYYY"))
         setDescription(props.description)
         setCategory(props.category)

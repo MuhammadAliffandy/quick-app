@@ -108,7 +108,7 @@ const AppRoomInbox = (props) => {
                     
                     if(props.data.groupId != null){
                         const groupsData = await getGroupById(props.data.groupId)
-                        console.log(groupsData )
+
                         setGroups(groupsData)
                     }
 

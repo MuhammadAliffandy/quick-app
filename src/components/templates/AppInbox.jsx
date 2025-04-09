@@ -71,7 +71,6 @@ const AppInbox = () => {
 
               const personalMessages = Object.values(personalMessagesMap);
 
-              // GROUP MESSAGE - ambil latest dari masing-masing groupId
               const groupMessagesMap = allMessages.reduce((acc, msg) => {
                 if (msg.groupId && msg.receiverId === null) {
                   const groupId = msg.groupId;
@@ -87,12 +86,10 @@ const AppInbox = () => {
 
               const groupMessages = Object.values(groupMessagesMap);
 
-              // Gabungkan dan urutkan berdasarkan waktu terbaru
               const containMessages = [...personalMessages, ...groupMessages].sort(
                 (a, b) => dayjs(b.createDate).valueOf() - dayjs(a.createDate).valueOf()
               );
 
-              // Ambil info tambahan seperti username & nama group
               const finalMessages = await Promise.all(
                 containMessages.map(async (data) => {
                   const user = await getUserById(data.senderId);
@@ -104,9 +101,6 @@ const AppInbox = () => {
                   };
                 })
               );
-
-              console.log(finalMessages);
-
               setMessageCurrent(finalMessages);
               setMessageList(finalMessages);
               setLoading(false);
@@ -193,6 +187,7 @@ const AppInbox = () => {
                             {
                               data.groupId != null ? 
                               <AppMessage
+                                    isRead = {index == 0 ? true : false}
                                     isGroup={true}
                                     title={data.groupName}
                                     date={data.createDate}
@@ -201,10 +196,11 @@ const AppInbox = () => {
                                     onClick={()=>{
                                       setOpenRoom(true)
                                       setMessageOpened(dataOpened)
-                                }}
-                              />
-                              :
-                              <AppMessage
+                                    }}
+                                    />
+                                    :
+                                <AppMessage
+                                    isRead = {index == 0 ? true : false}
                                     isGroup={false}
                                     title={data.username}
                                     date={data.createDate}

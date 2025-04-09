@@ -7,18 +7,18 @@ export const convertDatePeriodText = (date) => {
     const today = dayjs();
     const daysLeft = targetDate.diff(today, "day");
 
-    if (daysLeft < 0 || daysLeft < 7) return "";
+    if (daysLeft > 7 || daysLeft < 0) return "";
+
 
     return `${daysLeft} days left`;
-}
+};
 
 export const convertDateToISOString = () => {
     dayjs.extend(customParseFormat);
 
     const date = dayjs("11/04/2025", "DD/MM/YYYY");
 
-    console.log(date.format("YYYY-MM-DD")); 
-    console.log(date.toISOString());        
+    return date ;
 }
 
 export const convertFormatDateKey = (dateTimeString) => {

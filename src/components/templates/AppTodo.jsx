@@ -176,12 +176,13 @@ const AppTodo = () => {
                                         />
                                 }
                                 <AppTask
+                                    isNew={false}
                                     title={data.title}
-                                    date={data.dateTask}
+                                    date={index == 0 ? new Date(Date.now() + 5 * 24 * 60 * 60 * 1000).toISOString() : data.dateTask}
                                     description={data.description}
-                                    dateTime={data.dateTask}
+                                    dateTime={index == 0 ? new Date(Date.now() + 5 * 24 * 60 * 60 * 1000).toISOString() : data.dateTask}
                                     category={data.category}
-                                    datePeriod={data.dateTask}
+                                    datePeriod={ index == 0 ? new Date(Date.now() + 5 * 24 * 60 * 60 * 1000).toISOString() : data.dateTask}
                                     onChangeTitle={(value)=> setTitle(value) }
                                     onChangeDate={(value)=> setDate(value)}
                                     onChangeDescription={(value)=> setDescription(value)}
