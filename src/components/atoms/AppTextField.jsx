@@ -44,7 +44,7 @@ const AppTextField = (props) => {
                         fontSize: props.fontSize || "14px",
                         padding: props.padding || "10px",
                         paddingLeft: props.paddingLeft,
-                        borderRadius: "5px",
+                        borderRadius: props.borderRadius || "5px",
                         border: props.border ? "1px solid #828282" : "",
                         textDecoration: props.isCheck ?  'line-through' : 'none',
                         "& .MuiInputBaseRoot.MuiDisabled": {

@@ -10,7 +10,7 @@ const AppSelectButton = (props) => {
     };
 
     return (
-        <FormControl sx={{ m: 1, minWidth: 70, padding: 0}}>
+        <FormControl sx={{ m: 1, width: '100%', padding: 0}}>
             <Select
             value={value}
             onChange={handleChange}

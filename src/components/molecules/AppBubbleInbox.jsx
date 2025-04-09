@@ -52,29 +52,54 @@ const AppBubbleInbox = (props) => {
                         horizontal: props.alignPopover,
                     }}
                 >
-                <div className="flex flex-col items-stretch"> 
-                    <AppButton
-                        text={'Edit'}
-                        color={'blue'}
-                        backgroundColor={'white'}
-                        padding={'16px'}
-                        onClick={props.onEdit}
+                {
+                    props.isMe ? 
+                    <div className="flex flex-col items-stretch"> 
+                        <AppButton
+                            text={'Edit'}
+                            color={'blue'}
+                            backgroundColor={'white'}
+                            padding={'16px'}
+                            onClick={props.onEdit}
+                            />
+                        <Divider sx={{
+                            '&::before, &::after': {
+                                borderBottomWidth: '1px', 
+                                borderColor: 'primary.grey',
+                            },
+                        }}/>
+                        <AppButton
+                            padding={'15px'}
+                            text={'Delete'}
+                            color={'red'}
+                            border={'0px solid #828282'}
+                            backgroundColor={'white'}
+                            onClick={props.onDelete}
                         />
-                    <Divider sx={{
-                        '&::before, &::after': {
-                            borderBottomWidth: '1px', 
-                            borderColor: 'primary.grey',
-                        },
-                    }}/>
-                    <AppButton
-                        padding={'15px'}
-                        text={'Delete'}
-                        color={'red'}
-                        border={'0px solid #828282'}
-                        backgroundColor={'white'}
-                        onClick={props.onDelete}
-                    />
-                </div>
+                    </div> :
+                    <div className="flex flex-col items-stretch"> 
+                        <AppButton
+                            text={'Share'}
+                            color={'blue'}
+                            backgroundColor={'white'}
+                            padding={'16px'}
+                            onClick={props.onShare}
+                            />
+                        <Divider sx={{
+                            '&::before, &::after': {
+                                borderBottomWidth: '1px', 
+                                borderColor: 'primary.grey',
+                            },
+                        }}/>
+                        <AppButton
+                            padding={'15px'}
+                            text={'Reply'}
+                            color={'blue'}
+                            backgroundColor={'white'}
+                            onClick={props.onReply}
+                        />
+                    </div>
+                }
                 </Popover>
             </Box>
         </Box>

@@ -8,6 +8,7 @@ import AppTextfieldEditor from "../molecules/AppTextfieldEditor";
 import { convertDatePeriodText } from "@/utils/helper";
 import AppButton from "../atoms/AppButton";
 import dayjs from "dayjs";
+import AppSelectCategory from "../molecules/AppSelectCategory";
 
 
 function MuiCollapse(props) {
@@ -22,7 +23,7 @@ function MuiCollapse(props) {
                     transition={{ duration: 0.3, ease: "easeInOut" }}
                     className="overflow-hidden"
                 >
-                    <Box className="ml-10 flex flex-col gap-[5px] justify-start items-start">
+                    <Box className="ml-10 flex flex-col gap-[5px] justify-start items-start w-full">
                         <AppDatePicker 
                             value={props.date}
                             onChange={(value) => {
@@ -33,6 +34,10 @@ function MuiCollapse(props) {
                             onChange={(value) => {
                                 props.onChangeDescription(value)
                         }}/>
+                        <AppSelectCategory
+                            value={props.valueCategory}
+                            onChange={props.onChangeCategory}
+                        />
                         { props.isNew && 
                             <Box className='flex items-center justify-end gap-[12px] w-full'>
                                 <AppButton
@@ -61,6 +66,7 @@ export default function AppTask(props) {
     const [ dateTime, setDateTime ] = useState('')
     const [ datePeriod, setDatePeriod ] = useState('')
     const [ description, setDescription ] = useState('No Description')
+    const [ category, setCategory ] = useState([])
 
     const handleChangeTitle = (value) => {
         setTitle(value)
@@ -70,6 +76,11 @@ export default function AppTask(props) {
     const handleChangeDescription = (value) => {
         setDescription(value)
         props.onChangeDescription(value)
+    }
+
+    const handleChangeCategory = (value) => {
+        setCategory(value)
+        props.onChangeCategory(value)
     }
 
     const handleChangeDate = (value) => {
@@ -91,6 +102,7 @@ export default function AppTask(props) {
         setDatePeriod(datePeriod)
         setDateTime(dayjs(props.dateTime).format("DD/MM/YYYY"))
         setDescription(props.description)
+        setCategory(props.category)
     }
 
     useEffect(()=>{
@@ -117,6 +129,8 @@ export default function AppTask(props) {
                 isNew={props.isNew}
                 date={date}
                 description={description}
+                valueCategory={category}
+                onChangeCategory={handleChangeCategory}
                 onChangeDate={handleChangeDate} 
                 onChangeDescription={handleChangeDescription}   
                 onCancel={props.onCancel}

@@ -13,10 +13,12 @@ const AppTodo = () => {
     const [newTitle, setNewtTitle] = useState('')
     const [newDescription, setNewDescription] = useState('')
     const [newDate, setNewDate] = useState({})
+    const [newCategory, setNewCategory] = useState([])
     // 
     const [title, setTitle] = useState('')
     const [description, setDescription] = useState('')
     const [date, setDate] = useState({})
+    const [category, setCategory] = useState([])
     // 
     const [ isNewTask , setNewTask ] = useState(false)
     const [ loading , setLoading ] = useState(false)
@@ -157,11 +159,13 @@ const AppTodo = () => {
                                             title={newTitle}
                                             date={newDate}
                                             description={newDescription}
+                                            category={newCategory}
                                             dateTime={''}
                                             datePeriod={''}
                                             onChangeTitle={(value)=> setNewtTitle(value) }
                                             onChangeDate={(value)=> setNewDate(value)}
                                             onChangeDescription={(value)=> setNewDescription(value)}
+                                            onChangeCategory={(value)=> setNewCategory(value)}
                                             onAdd={handleCreateTask}
                                             onCancel={()=>{setNewTask(false)}}
                                         />
@@ -171,10 +175,12 @@ const AppTodo = () => {
                                     date={data.dateTask}
                                     description={data.description}
                                     dateTime={data.dateTask}
+                                    category={data.category}
                                     datePeriod={data.dateTask}
                                     onChangeTitle={(value)=> setTitle(value) }
                                     onChangeDate={(value)=> setDate(value)}
                                     onChangeDescription={(value)=> setDescription(value)}
+                                    onChangeCategory={(value)=> setCategory(value)}
                                     onDeleteTask={() => handleDeleteTask(data.id)}
                                 />
                                 { index+1 != tasks.length && <Divider sx={{ borderColor:'primary.grey'  }} /> }

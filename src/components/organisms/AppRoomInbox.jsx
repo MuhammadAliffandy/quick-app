@@ -5,7 +5,7 @@ import AppTextfieldInbox from "../molecules/AppTextfieldInbox";
 import AppBubbleInbox from "../molecules/AppBubbleInbox";
 import { useEffect, useState, useMemo } from "react";
 import { convertFormatDateKey , assignUserColorsWithCookie} from "@/utils/helper";
-import { getMessages } from "@/api/repository/messagesRepository";
+import { deleteMessage, getMessages } from "@/api/repository/messagesRepository";
 import { toast } from "react-toastify";
 import { getUser } from "@/api/repository/usersRepository";
 import { getGroupMessage } from "@/api/repository/groupMessagesRepository";
@@ -56,6 +56,9 @@ const AppRoomInbox = (props) => {
     const [senderUser, setSenderUser] = useState([])
     const [groups, setGroups] = useState([])
     const [typingValue , setTypingValue] = useState('')
+    const [isReply, setReply] = useState(false)
+    const [messageReply , setMesssageReply] = useState('')
+    const [usernameReply , setUsernameReply] = useState('')
 
     const groupingInboxByDate = (data) => {
         const grouped = {};
@@ -144,9 +147,35 @@ const AppRoomInbox = (props) => {
                 }
             } catch (err) {
                 toast.error('Server error');
-                console.error(err);
             }
         };
+
+    const handleDeleteMessage = async (id) => {
+        try {
+            setLoading(true)
+            const res = await deleteMessage(id)
+            if(res.status == 200){
+
+                setLoading(false)
+                toast.success('Delete Message Success')
+            }else{
+                setLoading(false)
+                toast.error('Delete Message Failed')
+                
+            }
+            
+        } catch (error) {
+            toast.error('Server error');
+            setLoading(false)
+        }
+    }
+
+    const handleReplyMesasge = (data) => {
+        setReply(true)
+        setUsernameReply(data.username)
+        setMesssageReply(data.message)
+    }
+
 
     useEffect(()=>{
         getMessageData()
@@ -194,6 +223,7 @@ const AppRoomInbox = (props) => {
                                                 return(
                                                         <AppBubbleInbox
                                                             key={index}
+                                                            isMe = {data.senderId == props.data.receiverId ? true : false }
                                                             align={data.senderId == props.data.receiverId ? "flex-end" : 'flex-start'}
                                                             direction={data.senderId == props.data.receiverId  ? "flex-row-reverse" : 'flex-row'}
                                                             usernameColor={color.text}
@@ -203,7 +233,10 @@ const AppRoomInbox = (props) => {
                                                             alignPopover={data.senderId == props.data.receiverId  ? "right" : 'left'}
                                                             date={''}
                                                             onEdit={()=>{}}
-                                                            onDelete={()=>{}}
+                                                            onDelete={()=>{handleDeleteMessage(data.id) }}
+                                                            onShare={()=>{}}
+                                                            onReply={()=>{handleReplyMesasge({username:data.username , message: data.text })}}
+
                                                         />
                                                 )
                                             })
@@ -214,14 +247,20 @@ const AppRoomInbox = (props) => {
                         }
                         
                     </Box>
-                    <AppTextfieldInbox
-                        value={typingValue}
-                        placeholder={'Type a message'}
-                        onChange={((value)=>{
-                            setTypingValue(value)
-                        })}
-                        onClick={()=>{}}
-                    />
+                    <Box>
+                        <AppTextfieldInbox
+                            value={typingValue}
+                            placeholder={'Type a message'}
+                            onChange={((value)=>{
+                                setTypingValue(value)
+                            })}
+                            onClick={()=>{}}
+                            isReply={isReply}
+                            messageReply={messageReply}
+                            usernameReply={usernameReply}
+                            onCloseReply={() => setReply(false)}
+                        />
+                    </Box>
                 </>
             }
             
