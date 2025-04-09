@@ -40,3 +40,19 @@ git clone https://github.com/your-username/quickk-app.git
 cd quickk-app
 ```
 
+```bash
+npm install
+# or
+yarn
+```
+
+```bash
+npm run dev
+# or
+yarn dev
+```
+
+```bash
+http://localhost:3000
+```
+
