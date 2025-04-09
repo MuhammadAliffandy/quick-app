@@ -55,7 +55,7 @@ const AppFoundation = () => {
                 }}
             >
                 <div className="w-[45vw]">
-                    { quick == 'todo' ? <AppTodo/> : <AppInbox/> }
+                    { quick == 'todo' ? <AppTodo/> : quick == 'inbox' ? <AppInbox/> : '' }
                 </div>
             </Popover>
         </Box>

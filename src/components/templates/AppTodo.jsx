@@ -142,7 +142,7 @@ const AppTodo = () => {
             </Box>
             <Box className= { 
                 loading ? 'flex flex-col justify-center items-center h-full w-full'
-                : 'flex flex-col gap-[22px] items-center justify-start w-full scrollbar-thumb-rounded-full scrollbar-track-rounded-full scrollbar scrollbar-w-[4px] scrollbar-thumb-slate-200 scrollbar-track-transparent overflow-y-scroll' 
+                : 'flex flex-col gap-[22px] items-center justify-start w-full scrollbar-thumb-rounded-full scrollbar-track-rounded-full scrollbar scrollbar-w-[4px] scrollbar-thumb-slate-400 scrollbar-track-transparent overflow-y-scroll' 
                 }>
                 {
                     loading ? 

@@ -46,7 +46,6 @@ export const assignUserColorsWithCookie = (messages) => {
     messages.forEach((msg) => {
         const username = msg.username;
         if (!userColorMap[username]) {
-            // Cari index yang belum dipakai
             while (usedIndexes.includes(colorIndex)) {
             colorIndex++;
             }

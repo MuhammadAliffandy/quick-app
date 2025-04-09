@@ -33,6 +33,7 @@ const AppTextfieldEditor = (props) => {
                     value={props.value}
                     border={isChange}
                     placeholder={'No Description'}
+                    paddingLeft={'10px'}
                     onChange={handleChange}
                     onBlur={()=>{setChange(false)}}
                 />

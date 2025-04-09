@@ -48,8 +48,10 @@ const AppTitleTask = (props) => {
                 <AppTextField
                     id='typeBar'
                     border={isChange}
+                    placeholder={'Type Task Title'}
                     isCheck={isCheck}
                     disabled={isCheck}
+                    paddingLeft={'10px'}
                     padding={'0px'}
                     value={props.title}
                     onChange={(value)=>{

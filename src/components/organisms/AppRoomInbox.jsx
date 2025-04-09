@@ -3,49 +3,13 @@ import { Box, Divider } from "@mui/material";
 import AppTitleInbox from "../molecules/AppTitleInbox";
 import AppTextfieldInbox from "../molecules/AppTextfieldInbox";
 import AppBubbleInbox from "../molecules/AppBubbleInbox";
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useRef } from "react";
 import { convertFormatDateKey , assignUserColorsWithCookie} from "@/utils/helper";
-import { deleteMessage, getMessages } from "@/api/repository/messagesRepository";
+import { deleteMessage, getMessage, getMessages } from "@/api/repository/messagesRepository";
 import { toast } from "react-toastify";
 import { getUser } from "@/api/repository/usersRepository";
 import { getGroupMessage } from "@/api/repository/groupMessagesRepository";
 import AppLoading from "../atoms/AppLoading";
-
-
-const chatMessages = [
-    {
-      id: 1,
-      username: "Mary Hilda",
-      role: "other",
-      dateTime: "2021-06-02T19:32:00",
-      message:
-        "Hello Obaidullah, I will be your case advisor for case #029290. I have assigned some homework for you to fill. Please keep up with the due dates. Should you have any questions, you can message me anytime. Thanks.",
-    },
-    {
-      id: 2,
-      username: "You",
-      role: "me",
-      dateTime: "2021-06-02T19:32:00",
-      message:
-        "Please contact Mary for questions regarding the case bcs she will be managing your forms from now on! Thanks Mary.",
-    },
-    {
-      id: 3,
-      username: "Mary Hilda",
-      role: "other",
-      dateTime: "2021-06-02T19:32:00",
-      message: "Sure thing, Claren",
-    },
-    {
-      id: 4,
-      username: "Obaidullah Amarkhil",
-      role: "other",
-      dateTime: "2021-06-02T19:32:00",
-      message: "Morning. I’ll try to do them. Thanks",
-    },
-  ];
-  
-
 
 const AppRoomInbox = (props) => {
 
@@ -59,6 +23,7 @@ const AppRoomInbox = (props) => {
     const [isReply, setReply] = useState(false)
     const [messageReply , setMesssageReply] = useState('')
     const [usernameReply , setUsernameReply] = useState('')
+    const bottomRef = useRef(null);
 
     const groupingInboxByDate = (data) => {
         const grouped = {};
@@ -96,6 +61,19 @@ const AppRoomInbox = (props) => {
         }
     }  
     
+    const getMessageById = async (id) => {
+        try {
+            const res = await getMessage(id)
+                if(res.status == 200){
+                return res.data
+            }else{
+            toast.error('Messages Not Found')
+            }
+        } catch (error) {
+            toast.error('Server Error')
+        }
+    }  
+
     const getMessageData = async () => {
         try {
             setLoading(true)
@@ -118,9 +96,11 @@ const AppRoomInbox = (props) => {
                     const finalMessages = await Promise.all(
                         filteredMessages.map(async (data) => {
                         const user = await getUserById(data.senderId);
+                        const message = data.replyId != null  && await getMessageById(data.replyId)
                         return {
                                 ...data,
                                 username: user?.username ?? 'Unknown',
+                                messageReply : message?.text ?? ''
                             };
                         })
                     );
@@ -148,7 +128,7 @@ const AppRoomInbox = (props) => {
             } catch (err) {
                 toast.error('Server error');
             }
-        };
+    };
 
     const handleDeleteMessage = async (id) => {
         try {
@@ -176,6 +156,9 @@ const AppRoomInbox = (props) => {
         setMesssageReply(data.message)
     }
 
+    useEffect(()=>{
+        bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
+    },[messageList])
 
     useEffect(()=>{
         getMessageData()
@@ -204,7 +187,7 @@ const AppRoomInbox = (props) => {
                         />
                     </Box>
                     <Divider sx={{ borderColor:'primary.grey'  }} />
-                    <Box className='flex-1 flex flex-col gap-[22px] items-normal justify-end scrollbar-thumb-rounded-full scrollbar-track-rounded-full scrollbar scrollbar-w-[4px] scrollbar-thumb-slate-200 scrollbar-track-transparent overflow-y-scroll' sx={{ padding: '0px 32px 0px 32px' }}>
+                    <Box  className='flex-1 flex flex-col gap-[22px] justify-start scrollbar-thumb-rounded-full scrollbar-track-rounded-full scrollbar scrollbar-w-[4px] scrollbar-thumb-slate-400 scrollbar-track-transparent overflow-y-scroll' sx={{ padding: '0px 32px 0px 32px' }}>
                         {
                             messageList.length != 0 && Object.entries(messageList).map(([date, messages]) => {
                                 return(
@@ -226,6 +209,8 @@ const AppRoomInbox = (props) => {
                                                             isMe = {data.senderId == props.data.receiverId ? true : false }
                                                             align={data.senderId == props.data.receiverId ? "flex-end" : 'flex-start'}
                                                             direction={data.senderId == props.data.receiverId  ? "flex-row-reverse" : 'flex-row'}
+                                                            isReply={ data.replyId != null ? true : false  }
+                                                            messageReply={data.messageReply}
                                                             usernameColor={color.text}
                                                             color={color.bg}
                                                             username={data.username}
@@ -242,10 +227,11 @@ const AppRoomInbox = (props) => {
                                             })
                                         }
                                     </div>
+                                
                                 )
                             })
                         }
-                        
+                        <div ref={bottomRef} ></div>
                     </Box>
                     <Box>
                         <AppTextfieldInbox

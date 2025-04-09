@@ -21,7 +21,7 @@ function MuiCollapse(props) {
                     animate={{ height: "auto", opacity: 1 }}
                     exit={{ height: 0, opacity: 0 }}
                     transition={{ duration: 0.3, ease: "easeInOut" }}
-                    className="overflow-hidden"
+                    className="overflow-hidden flex flex-col gap-[20px]"
                 >
                     <Box className="ml-10 flex flex-col gap-[5px] justify-start items-start w-full">
                         <AppDatePicker 
@@ -38,20 +38,20 @@ function MuiCollapse(props) {
                             value={props.valueCategory}
                             onChange={props.onChangeCategory}
                         />
-                        { props.isNew && 
-                            <Box className='flex items-center justify-end gap-[12px] w-full'>
-                                <AppButton
-                                    text={'Cancel'}
-                                    backgroundColor={'red'}
-                                    onClick={props.onCancel}
-                                />
-                                <AppButton
-                                    text={'Add'}
-                                    onClick={props.onAdd}
-                                />
-                            </Box> 
-                        }
                     </Box>
+                    { props.isNew && 
+                        <Box className='flex items-center justify-end gap-[12px] w-full'>
+                            <AppButton
+                                text={'Cancel'}
+                                backgroundColor={'red'}
+                                onClick={props.onCancel}
+                            />
+                            <AppButton
+                                text={'Add'}
+                                onClick={props.onAdd}
+                            />
+                        </Box> 
+                    }
                 </motion.div>
             )}
         </AnimatePresence>

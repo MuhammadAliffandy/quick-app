@@ -19,12 +19,19 @@ const AppBubbleInbox = (props) => {
 
 
     return(
-        <Box className = {`flex flex-col justify-end  w-full p-[10px]`} sx={{ alignItems:props.align}} >
+        <Box className = {`flex flex-col justify-end  w-full gap-[3px] p-[10px]`} sx={{ alignItems:props.align}} >
             <Typography sx={{
                 fontSize: "12px",
                 fontWeight: 'bold',
                 color:  props.usernameColor || 'primary.main '
             }}>{props.username || 'username'}</Typography>
+            {
+                props.isReply && <Box sx={{
+                    backgroundColor: "#F2F2F2",
+                }} className={'flex flex-col items-stretch justify-start p-[10px] rounded-[5px] w-fit max-w-[80%]'}>
+                    <Typography sx={{ fontSize: '12px' }}>{props.messageReply || 'Messages from friend'}</Typography>
+                </Box>
+            }
             <Box  className={`flex ${props.direction || ''} justify-start items-start w-[70%] `}>
                 <Box sx={{ backgroundColor: props.color }} className='p-[10px] rounded-[5px] flex flex-col items-start justify-start gap-[12px]'>
                     <Typography sx={{

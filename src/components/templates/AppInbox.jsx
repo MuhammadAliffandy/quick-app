@@ -55,46 +55,61 @@ const AppInbox = () => {
         
             if (res.status === 200) {
               const allMessages = res.data;
+              
+              const personalMessagesMap = allMessages.reduce((acc, msg) => {
+                if (msg.receiverId === currentUserId && !msg.groupId) {
+                  const senderId = msg.senderId;
+                  if (
+                    !acc[senderId] ||
+                    dayjs(msg.createDate).isAfter(dayjs(acc[senderId].createDate))
+                  ) {
+                    acc[senderId] = msg;
+                  }
+                }
+                return acc;
+              }, {});
 
-              const personalMessages = allMessages.filter(
-                (msg) => msg.receiverId === currentUserId && !msg.groupId
-              );
-        
-              const groupMessages = allMessages.filter(
-                (msg) => msg.groupId && msg.receiverId === null
-              );
-        
-              const latestGroupMessages = Object.values(
-                groupMessages.reduce((acc, msg) => {
+              const personalMessages = Object.values(personalMessagesMap);
+
+              // GROUP MESSAGE - ambil latest dari masing-masing groupId
+              const groupMessagesMap = allMessages.reduce((acc, msg) => {
+                if (msg.groupId && msg.receiverId === null) {
                   const groupId = msg.groupId;
                   if (
                     !acc[groupId] ||
-                    dayjs(msg.createdDate).isAfter(dayjs(acc[groupId].createdDate))
+                    dayjs(msg.createDate).isAfter(dayjs(acc[groupId].createDate))
                   ) {
                     acc[groupId] = msg;
                   }
-                  return acc;
-                }, {})
+                }
+                return acc;
+              }, {});
+
+              const groupMessages = Object.values(groupMessagesMap);
+
+              // Gabungkan dan urutkan berdasarkan waktu terbaru
+              const containMessages = [...personalMessages, ...groupMessages].sort(
+                (a, b) => dayjs(b.createDate).valueOf() - dayjs(a.createDate).valueOf()
               );
-        
-              const containMessages = [...personalMessages, ...latestGroupMessages].sort(
-                (a, b) => dayjs(b.createdDate).valueOf() - dayjs(a.createdDate).valueOf()
-              );
-              
+
+              // Ambil info tambahan seperti username & nama group
               const finalMessages = await Promise.all(
                 containMessages.map(async (data) => {
                   const user = await getUserById(data.senderId);
-                  const group =  data.groupId != null && await getGroupById(data.groupId);
+                  const group = data.groupId ? await getGroupById(data.groupId) : null;
                   return {
                     ...data,
-                    username: user?.username ?? 'Unknown',
-                    groupName: group?.name ?? 'Non Group Name'
+                    username: user?.username || 'Unknown',
+                    groupName: group?.name || '',
                   };
                 })
               );
-              setMessageCurrent(finalMessages)
-              setMessageList(finalMessages)
-              setLoading(false)
+
+              console.log(finalMessages);
+
+              setMessageCurrent(finalMessages);
+              setMessageList(finalMessages);
+              setLoading(false);
             } else {
               toast.error('User not found');
               setLoading(false)
@@ -157,7 +172,7 @@ const AppInbox = () => {
                         onChange={handleSearchInbox}/>
                 </Box>
                 <Box className={ loading ? 'flex flex-col justify-center items-center h-full w-full' :
-                'flex flex-col gap-[22px] items-center justify-start w-full scrollbar-thumb-rounded-full scrollbar-track-rounded-full scrollbar scrollbar-w-[4px] scrollbar-thumb-slate-200 scrollbar-track-transparent overflow-y-scroll '}>
+                'flex flex-col gap-[22px] items-center justify-start w-full scrollbar-thumb-rounded-full scrollbar-track-rounded-full scrollbar scrollbar-w-[4px] scrollbar-thumb-slate-400 scrollbar-track-transparent overflow-y-scroll '}>
                 {
                   loading ? 
                   <AppLoading
